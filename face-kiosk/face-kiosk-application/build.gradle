@@ -1,0 +1,9 @@
+apply plugin: 'application'
+
+mainClassName = 'com.pillar.skynet.facekiosk.application.Main'
+
+dependencies {
+    compile(
+        [group: 'ch.qos.logback', name: 'logback-classic',   version: project.logbackVersion]
+    )
+}

@@ -1,0 +1,3 @@
+rootProject.name = 'face-kiosk'
+
+include ':face-kiosk-application'

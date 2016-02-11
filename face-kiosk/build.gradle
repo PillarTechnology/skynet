@@ -1,0 +1,60 @@
+apply plugin: 'base'
+
+project.ext {
+    // build dependencies 
+    javaVersion = '1.8'
+
+    // runtime dependencies
+    slf4jVersion = '1.7.15'
+    logbackVersion = '1.1.3'
+
+    // test dependencies
+    junitVersion    = '4.12'
+    mockitoVersion  = '1.9.5'
+    hamcrestVersion = '1.3'
+}
+
+buildscript {
+}
+
+allprojects {
+    group   = 'com.pillar.skynet.facekiosk'
+    version = '0.1.0'
+
+    repositories {
+        jcenter()
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+
+    tasks.withType(JavaCompile) {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+
+        options.fork = true
+        options.encoding = "UTF-8"
+    }
+
+    dependencies {
+        testCompile(
+            [group: 'org.slf4j', name: 'log4j-over-slf4j', version: project.slf4jVersion],
+            [group: 'org.slf4j', name: 'jcl-over-slf4j',   version: project.slf4jVersion],
+
+            [group: 'ch.qos.logback', name: 'logback-classic',   version: project.logbackVersion],
+
+            [group: 'org.hamcrest', name: 'hamcrest-core', version: project.hamcrestVersion],
+        )
+        testCompile(group: 'junit', name: 'junit', version: project.junitVersion) {
+            exclude module: 'hamcrest-core'
+        }
+        compile(
+            [group: 'org.slf4j', name: 'slf4j-api', version: project.slf4jVersion],
+        )
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.11'
+}

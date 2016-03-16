@@ -1,29 +1,50 @@
 package com.pillar.skynet.facekiosk.application;
 
+import com.pillar.skynet.facekiosk.camera.BuiltInCamera;
 import com.pillar.skynet.facekiosk.detection.FaceDetector;
-import org.opencv.core.Core;
-import org.opencv.core.Rect;
+import com.pillar.skynet.facekiosk.recognition.OpenCVFaceRecognizer;
+import org.bytedeco.javacpp.Loader;
+import org.bytedeco.javacpp.opencv_core.CvSeq;
+import org.bytedeco.javacpp.opencv_objdetect;
+import org.bytedeco.javacv.FrameGrabber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static nu.pattern.OpenCV.loadShared;
-import static org.opencv.core.Core.NATIVE_LIBRARY_NAME;
+import java.io.IOException;
+
+import static org.bytedeco.javacpp.opencv_core.IPL_DEPTH_8U;
+import static org.bytedeco.javacpp.opencv_core.IplImage;
+import static org.bytedeco.javacpp.opencv_imgcodecs.cvLoadImage;
+import static org.bytedeco.javacpp.opencv_imgproc.CV_BGR2GRAY;
+import static org.bytedeco.javacpp.opencv_imgproc.cvCvtColor;
+
 
 public class Main {
 
     private static final Logger LOG = LoggerFactory.getLogger(Main.class);
 
-    public static void main(String[] s) {
+    public static void main(String[] s) throws IOException, FrameGrabber.Exception {
         LOG.info("Eye see you...");
-		loadShared();
-		System.loadLibrary(NATIVE_LIBRARY_NAME);
+		Loader.load(opencv_objdetect.class);
 
 		FaceDetector faceDetector =  new FaceDetector();
+		String imagePath = Main.class.getResource("/lena.png").getPath();
+		IplImage grayImage = IplImage.create(cvLoadImage(imagePath).width(), cvLoadImage(imagePath).height(), IPL_DEPTH_8U, 1);
+		cvCvtColor(cvLoadImage(imagePath), grayImage, CV_BGR2GRAY);
+		CvSeq faces = faceDetector.detectFaces(grayImage);
 
-		Rect[] faces = faceDetector.detectFaces("/lena.png");
-
-		if (faces.length > 0) {
-			System.out.println("Found a face tho.");
+		if (faces.total() > 0) {
+			LOG.info("Found a face tho.");
 		}
+
+		BuiltInCamera camera = new BuiltInCamera();
+
+		OpenCVFaceRecognizer faceRecognizer = new OpenCVFaceRecognizer();
+
+		faceRecognizer.train(Main.class.getResource("/faces/").getPath());
+
+		String personName = faceRecognizer.predict(camera.convertToDetectableFrame(camera.takePicture()));
+
+		LOG.info("Hello " + personName);
     }
 }

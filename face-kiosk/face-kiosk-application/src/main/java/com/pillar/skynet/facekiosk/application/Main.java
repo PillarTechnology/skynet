@@ -6,7 +6,10 @@ import com.pillar.skynet.facekiosk.recognition.OpenCVFaceRecognizer;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.opencv_core.CvSeq;
 import org.bytedeco.javacpp.opencv_objdetect;
+import org.bytedeco.javacv.Frame;
 import org.bytedeco.javacv.FrameGrabber;
+import org.bytedeco.javacv.OpenCVFrameConverter;
+import org.bytedeco.javacv.OpenCVFrameConverter.ToIplImage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,25 +29,25 @@ public class Main {
     public static void main(String[] s) throws IOException, FrameGrabber.Exception {
         LOG.info("Eye see you...");
 		Loader.load(opencv_objdetect.class);
+		BuiltInCamera camera = new BuiltInCamera();
 
 		FaceDetector faceDetector =  new FaceDetector();
-		String imagePath = Main.class.getResource("/lena.png").getPath();
-		IplImage grayImage = IplImage.create(cvLoadImage(imagePath).width(), cvLoadImage(imagePath).height(), IPL_DEPTH_8U, 1);
-		cvCvtColor(cvLoadImage(imagePath), grayImage, CV_BGR2GRAY);
-		CvSeq faces = faceDetector.detectFaces(grayImage);
+		Frame frame = camera.takePicture();
+		ToIplImage toIplImage = new ToIplImage();
+		IplImage photo = toIplImage.convert(frame);
+		IplImage grayPhoto = IplImage.create(photo.width(), photo.height(), IPL_DEPTH_8U, 1);
+		cvCvtColor(photo, grayPhoto, CV_BGR2GRAY);
+		CvSeq faces = faceDetector.detectFaces(grayPhoto);
 
 		if (faces.total() > 0) {
 			LOG.info("Found a face tho.");
 		}
 
-		BuiltInCamera camera = new BuiltInCamera();
 
-		OpenCVFaceRecognizer faceRecognizer = new OpenCVFaceRecognizer();
-
-		faceRecognizer.train(Main.class.getResource("/faces/").getPath());
-
-		String personName = faceRecognizer.predict(camera.convertToDetectableFrame(camera.takePicture()));
-
-		LOG.info("Hello " + personName);
+//		OpenCVFaceRecognizer faceRecognizer = new OpenCVFaceRecognizer();
+//		//TODO: Need to resize picture to match training data before attempting to predict which face it is.
+//		faceRecognizer.train(Main.class.getResource("/faces/").getPath());
+//		String personName = faceRecognizer.predict());
+//		LOG.info("Hello " + personName);
     }
 }

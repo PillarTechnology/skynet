@@ -67,7 +67,7 @@ public class OpenCVFaceRecognizer {
 		}
 
 		faceRecognizer.train(images, labels);
-		faceRecognizer.save("/trainingdata.xml");
+//		faceRecognizer.save("/trainingdata.xml");
 	}
 
 	public String predict(Mat faceImage) {

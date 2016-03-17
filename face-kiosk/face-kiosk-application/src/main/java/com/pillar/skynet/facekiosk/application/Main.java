@@ -65,6 +65,6 @@ public class Main {
 		OpenCVFaceRecognizer faceRecognizer = new OpenCVFaceRecognizer();
 		faceRecognizer.train(Main.class.getResource("/faces/").getPath());
 		String personName = faceRecognizer.predict(face);
-		LOG.info("Hello " + personName);
+		Runtime.getRuntime().exec("say -v Alex \"Hello " + personName + "\"");
     }
 }

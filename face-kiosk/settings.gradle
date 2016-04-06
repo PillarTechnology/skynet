@@ -1,3 +1,5 @@
 rootProject.name = 'face-kiosk'
 
-include ':face-kiosk-application'
+include ':face-kiosk-application',
+        ':face-kiosk-trainer-application',
+        ':face-kiosk-recognizer-application'

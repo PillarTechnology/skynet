@@ -1,0 +1,8 @@
+dependencies {
+    compile "com.google.inject:guice:${guiceVersion}"
+
+    compile "org.projectlombok:lombok:${lombokVersion}"
+    compile 'org.bytedeco:javacv:1.1'
+    compile 'org.bytedeco.javacpp-presets:opencv:3.0.0-1.1:macosx-x86_64'
+    compile 'org.bytedeco.javacpp-presets:ffmpeg:2.8.1-1.1:macosx-x86_64'
+}

@@ -1,0 +1,10 @@
+apply plugin: 'application'
+
+mainClassName = 'com.pillar.skynet.facekiosk.trainer.TrainerApplication'
+
+dependencies {
+    runtime "ch.qos.logback:logback-classic:${project.logbackVersion}"
+
+    compile project(':face-kiosk-capture')
+    compile "com.google.inject:guice:${guiceVersion}"
+}

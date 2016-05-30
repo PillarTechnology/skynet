@@ -1,0 +1,20 @@
+# Welcome to Jekyll!
+#
+# This config file is meant for settings that affect your whole blog, values
+# which you are expected to set up once and rarely need to edit after that.
+# For technical reasons, this file is *NOT* reloaded automatically when you use
+# 'jekyll serve'. If you change this file, please restart the server process.
+
+# Site settings
+title: Pillar Technology Skynet Machine Learning Group
+short_title: Skynet
+email: team-skynet@pillartechnology.com
+description: >
+  Learning resources and mini-projects for the Pillar Skynet ML Group
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "http://pillartechnology.github.io/skynet" # the base hostname & protocol for your site
+twitter_username: agilesoftware
+github_username:  PillarTechnology
+
+# Build settings
+markdown: kramdown
